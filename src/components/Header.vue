@@ -5,8 +5,7 @@
       <nav class="nav">
         <button class="nav-btn" v-if="!user">Login</button>
         <div class="user-menu" v-else>
-          <!-- <span>Welcome, {{ user.name }}</span> -->
-          <span>{{ user.name }}</span>
+          <span>Welcome, {{ user.name }}</span>
           <button class="nav-btn">Dashboard</button>
           <button class="nav-btn">Logout</button>
         </div>

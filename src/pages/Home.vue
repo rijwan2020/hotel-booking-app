@@ -1,60 +1,47 @@
 <template>
-    <div class="fade-enter fade-enter-active">
-
-        <section class="hero">
-          <div class="banner">
-            <h1>BOOK A ROOM</h1>
-            <form class="search-form" @submit.prevent="handleSearch">
-              <select v-model="guestCount">
-                <option v-for="n in 10" :key="n" :value="n">{{ n }} Guest{{ n > 1 ? 's' : '' }}</option>
-              </select>
-
-              <input type="date" v-model="checkInDate" required />
-
-              <button type="submit">Search for Rooms</button>
-            </form>
-          </div>
-        </section>
+  <div class="hero-section">
+    <div class="hero-image">
+      <img src="../assets/images/banner-3.jpg" alt="banner image" class="banner-image">
     </div>
+    <div class="hero-content">
+      <h1>Book A Room</h1>
+      <div class="search-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Guest</label>
+            <select>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Check-in Date</label>
+            <input type="date" required>
+          </div>
+          <div class="form-group">
+            <label>Check-out Date</label>
+            <input type="date" required>
+          </div>
+        </div>
+        <button class="btn btn-dark">Search For Room</button>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+<script>
+export default {
+  setup () {
 
-const guestCount = ref(1)
-const checkInDate = ref('')
-const router = useRouter()
 
-const handleSearch = () => {
-  const params = new URLSearchParams({
-    guests: guestCount.value.toString(),
-    date: checkInDate.value,
-  }).toString()
-
-  router.push(`/rooms?${params}`)
+    return {}
+  }
 }
 </script>
 
-<style scoped>
-.hero {
-  text-align: center;
-  padding: 2rem;
-}
-.banner {
-  margin: auto;
-  max-width: 600px;
-}
-.search-form {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-top: 1rem;
-}
-.search-form select,
-.search-form input,
-.search-form button {
-  padding: 0.5rem;
-  font-size: 1rem;
-}
+<style lang="scss" scoped>
+
 </style>

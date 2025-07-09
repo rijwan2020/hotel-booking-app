@@ -5,7 +5,8 @@
 }
 
 body {
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
   line-height: 1.6;
   background-color: #f6f7f8;
   color: #31333a;
@@ -37,7 +38,7 @@ body {
 .logo {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #3C6371;
+  color: #3c6371;
   letter-spacing: -0.025em;
 }
 
@@ -49,11 +50,11 @@ body {
 
 .nav-btn {
   background: white;
-  border: 1px solid #3C6371;
+  border: 1px solid #3c6371;
   padding: 0.5rem 1.25rem;
   cursor: pointer;
   text-decoration: none;
-  color: #3C6371;
+  color: #3c6371;
   border-radius: 8px;
   font-weight: 500;
   font-size: 14px;
@@ -61,7 +62,7 @@ body {
 }
 
 .nav-btn:hover {
-  background-color: #3C6371;
+  background-color: #3c6371;
   color: white;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(60, 110, 113, 0.2);
@@ -76,4 +77,139 @@ body {
 .user-menu span {
   font-weight: 500;
   color: #31333a;
+}
+
+/* Page Layout */
+.page {
+  min-height: calc(100vh - 80px);
+  padding: 2rem 0;
+}
+
+/* Hero Section */
+.hero-section {
+  text-align: center;
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #3c6371 0%, #2a5154 100%);
+  color: white;
+  margin: -32px 0 48px 0;
+}
+
+.hero-image {
+  margin-bottom: 32px;
+}
+
+.placeholder-image {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  margin: 0 auto;
+  border-radius: 16px;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.banner-image {
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  margin: 0 auto;
+  border-radius: 16px;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 32px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+.search-form {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #31333a;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 14px 16px;
+  border: 2px solid #ededf1;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #31333a;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #3c6371;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(60, 110, 113, 0.1);
+}
+
+/* Button */
+.btn {
+  padding: 14px 28px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background-color: #3c6371;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2a5154;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(60, 110, 113, 0.2);
+}
+
+.btn-dark {
+  background-color: #31333a;
+  color: white;
+}
+
+.btn-dark:hover {
+  background-color: #1f2024;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(49, 51, 58, 0.2);
 }
