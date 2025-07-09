@@ -1,15 +1,21 @@
 <template>
   <div>
-
+    <Header />
+    <!-- <router-view /> -->
   </div>
 </template>
 
 <script>
-  export default {
-
-  }
+import Header from './components/Header.vue';
+export default {
+  name: 'App',
+  components: {
+    Header,
+  },
+  setup() {
+    return {};
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
