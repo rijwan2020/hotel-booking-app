@@ -7,27 +7,21 @@
     @select-room="handleRoomSelection"
     @back="currentPage = 'search'"
   />
+  <contact-form
+    v-if="currentPage === 'contact'"
+    :selected-room="selectedRoom"
+    :search-params="searchParams"
+    :current-user="currentUser"
+    @proceed="handleBookingSubmit"
+    @back="currentPage = 'room'"
+  />
 </template>
 
 <script setup>
 import { ref } from "vue";
 import RoomSearch from "../components/RoomSearch.vue";
 import RoomSelection from "../components/RoomSelection.vue";
-
-const currentPage = ref("search");
-const searchParams = ref({});
-const selectedRoom = ref(null);
-
-const handleRoomSearch = (data) => {
-  searchParams.value = data.searchParams;
-  currentPage.value = "room";
-};
-
-const handleRoomSelection = (room) => {
-  console.log("🚀 ~ handleRoomSelection ~ room:", room);
-  selectedRoom.value = room;
-  // currentPage.value = 'contact'
-};
+import ContactForm from "../components/ContactForm.vue";
 
 // Sample rooms data
 const rooms = ref([
@@ -65,4 +59,31 @@ const rooms = ref([
     max_guests: 3,
   },
 ]);
+
+const currentPage = ref('search')
+const currentUser = ref(null)
+const isLoading = ref(false)
+const error = ref(null)
+const successMessage = ref(null)
+const selectedRoom = ref(null)
+const searchParams = ref({})
+const currentBooking = ref(null)
+
+const handleRoomSearch = (data) => {
+  searchParams.value = data.searchParams;
+  currentPage.value = "room";
+};
+
+const handleRoomSelection = (room) => {
+  // console.log("🚀 ~ handleRoomSelection ~ room:", room);
+  selectedRoom.value = room;
+  currentPage.value = 'contact'
+};
+
+const handleBookingSubmit = (booking) => {
+  currentBooking.value = booking
+  currentPage.value = 'confirmation'
+  // handleSuccess('Booking confirmed successfully!')
+}
+
 </script>

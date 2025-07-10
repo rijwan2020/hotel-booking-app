@@ -158,7 +158,8 @@ body {
 }
 
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
   padding: 14px 16px;
   border: 2px solid #ededf1;
   border-radius: 8px;
@@ -169,10 +170,16 @@ body {
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
   border-color: #3c6371;
   outline: none;
   box-shadow: 0 0 0 3px rgba(60, 110, 113, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 /* Button */
@@ -212,6 +219,29 @@ body {
   background-color: #1f2024;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(49, 51, 58, 0.2);
+}
+
+.btn-dark:hover:not(:disabled) {
+  background: #1f2024;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(49, 51, 58, 0.3);
+}
+
+.btn-secondary {
+  background: white;
+  color: #3c6e71;
+  border: 2px solid #3c6e71;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #3c6e71;
+  color: white;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Booking Step */
@@ -395,4 +425,186 @@ body {
 .back-button-container {
   text-align: center;
   margin-top: 32px;
+}
+
+/* Contact Layout */
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 48px;
+  margin: 32px 0;
+}
+
+.contact-form-section {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid #ededf1;
+}
+
+.contact-form-section h2 {
+  margin-bottom: 32px;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #31333a;
+}
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  margin-top: 32px;
+}
+
+/* Booking summary */
+
+.booking-summary {
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid #ededf1;
+  height: fit-content;
+  position: sticky;
+  top: 120px;
+}
+
+.summary-header {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #ededf1;
+}
+
+.summary-dates {
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  color: #31333A;
+}
+
+.summary-nights,
+.summary-room {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.room-preview {
+  margin-bottom: 24px;
+}
+
+.room-preview img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.room-info {
+  margin-bottom: 24px;
+}
+
+.room-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #31333A;
+  font-size: 1.1rem;
+}
+
+.room-subtitle {
+  font-size: 14px;
+  color: #3C6E71;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+
+.amenities-preview h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #31333A;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.amenities-preview ul {
+  list-style: none;
+  padding: 0;
+}
+
+.amenities-preview li {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 4px;
+  padding-left: 16px;
+  position: relative;
+}
+
+.amenities-preview li:before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #3C6E71;
+  font-weight: bold;
+}
+
+.more-amenities {
+  font-style: italic;
+  color: #3C6E71 !important;
+}
+
+.pricing-breakdown {
+  border-top: 2px solid #ededf1;
+  padding-top: 20px;
+  margin-bottom: 24px;
+}
+
+.pricing-breakdown h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #31333A;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.price-row.total {
+  font-weight: 700;
+  border-top: 2px solid #ededf1;
+  padding-top: 16px;
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #31333A;
+}
+
+.guest-preview {
+  border-top: 2px solid #ededf1;
+  padding-top: 20px;
+}
+
+.guest-preview h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #31333A;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.guest-preview p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 8px;
 }
