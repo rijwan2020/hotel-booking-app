@@ -15,6 +15,11 @@
     @proceed="handleBookingSubmit"
     @back="currentPage = 'room'"
   />
+  <confirmation
+      v-if="currentPage === 'confirmation'"
+      :booking="currentBooking"
+      @go-to-dashboard="currentPage = 'dashboard'"
+    />
 </template>
 
 <script setup>
@@ -22,6 +27,7 @@ import { ref } from "vue";
 import RoomSearch from "../components/RoomSearch.vue";
 import RoomSelection from "../components/RoomSelection.vue";
 import ContactForm from "../components/ContactForm.vue";
+import Confirmation from "../components/Confirmation.vue";
 
 // Sample rooms data
 const rooms = ref([
@@ -75,15 +81,17 @@ const handleRoomSearch = (data) => {
 };
 
 const handleRoomSelection = (room) => {
-  // console.log("🚀 ~ handleRoomSelection ~ room:", room);
   selectedRoom.value = room;
   currentPage.value = 'contact'
 };
 
 const handleBookingSubmit = (booking) => {
+  booking.room = rooms.value.find(
+    (room) => room.id === booking.roomId
+  );
+  booking.confirmation_number = "RES" + Date.now().toString().slice(-8)
   currentBooking.value = booking
   currentPage.value = 'confirmation'
-  // handleSuccess('Booking confirmed successfully!')
 }
 
 </script>
