@@ -23,11 +23,12 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import RoomSearch from "../components/RoomSearch.vue";
 import RoomSelection from "../components/RoomSelection.vue";
 import ContactForm from "../components/ContactForm.vue";
 import Confirmation from "../components/Confirmation.vue";
+import { saveBooking } from "../utils/booking";
 
 // Sample rooms data
 const rooms = ref([
@@ -68,12 +69,14 @@ const rooms = ref([
 
 const currentPage = ref('search')
 const currentUser = ref(null)
-const isLoading = ref(false)
-const error = ref(null)
-const successMessage = ref(null)
 const selectedRoom = ref(null)
 const searchParams = ref({})
 const currentBooking = ref(null)
+
+const user = computed(() => {
+  const userLoggedId = localStorage.getItem('user');
+  return userLoggedId ? JSON.parse(userLoggedId) : null;
+});
 
 const handleRoomSearch = (data) => {
   searchParams.value = data.searchParams;
@@ -90,7 +93,12 @@ const handleBookingSubmit = (booking) => {
     (room) => room.id === booking.roomId
   );
   booking.confirmation_number = "RES" + Date.now().toString().slice(-8)
-  currentBooking.value = booking
+  booking.user_id = user.value.id ?? null;
+  booking.id = Date.now().toString().slice(-8); // Unique ID based on timestamp
+  booking.status = "confirmed";
+
+  saveBooking(booking);
+  currentBooking.value = booking;
   currentPage.value = 'confirmation'
 }
 

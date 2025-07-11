@@ -67,11 +67,9 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import router from "../router";
-// import { authService } from '../services/api'
-
-const emit = defineEmits(["set-user"]);
+import { login, register } from "../utils/auth";
 
 const authMode = ref("login");
 const loading = ref(false);
@@ -83,28 +81,42 @@ const form = reactive({
 });
 
 const handleSubmit = async () => {
-
-  let user = {};
-  if (authMode.value === 'login') {
-    // Simple login simulation
-    user = {
-      id: 1,
-      name: form.email.split('@')[0],
-      email: form.email
+  let user = null;
+  loading.value = true;
+  try {
+    if (authMode.value === 'login') {
+      const payloads = {
+        email: form.email,
+        password: form.password
+      }
+      user = await login(payloads);
+    } else {
+      const payloads = {
+        id: Date.now().toString().slice(-8), // Unique ID based on timestamp
+        name: form.name,
+        email: form.email,
+        password: form.password
+      }
+      user = await register(payloads);
     }
-  } else {
-    // Simple registration simulation
-    user = {
-      id: 1,
-      name: form.name,
-      email: form.email
-    }
+    loading.value = false;
+  } catch (error) {
+    loading.value = false;
+    alert(error);
+    return;
   }
-  localStorage.setItem('token', true);
-  emit("set-user", user);
-  router.push("/dashboard");
+  if (user) {
+    window.location.href = "/dashboard";
+  }
 
 };
+
+onMounted(() => {
+  const user = localStorage.getItem("user");
+  if (user) {
+    router.push("/dashboard");
+  }
+});
 </script>
 
 <style scoped>

@@ -52,31 +52,31 @@
           >
             <div class="booking-image">
               <img
-                v-if="booking.image_url"
-                :src="booking.image_url"
-                :alt="booking.room_name"
+                v-if="booking.room.image_url"
+                :src="booking.room.image_url"
+                :alt="booking.room.name"
                 @error="handleImageError"
               />
               <div v-else class="placeholder-image">Room Image</div>
             </div>
 
             <div class="booking-info">
-              <h3>{{ booking.room_name }}</h3>
+              <h3>{{ booking.room.name }}</h3>
               <div class="booking-details">
                 <p>
                   <strong>Dates:</strong>
-                  {{ formatDate(booking.check_in_date) }} -
-                  {{ formatDate(booking.check_out_date) }}
+                  {{ formatDate(booking.checkInDate) }} -
+                  {{ formatDate(booking.checkOutDate) }}
                 </p>
                 <p><strong>Guests:</strong> {{ booking.guests }}</p>
-                <p><strong>Total:</strong> S${{ booking.total_amount }}</p>
+                <p><strong>Total:</strong> S${{ booking.totalAmount }}</p>
                 <p>
                   <strong>Confirmation:</strong>
                   {{ booking.confirmation_number }}
                 </p>
-                <p v-if="booking.special_requests">
+                <p v-if="booking.specialRequests">
                   <strong>Special Requests:</strong>
-                  {{ booking.special_requests }}
+                  {{ booking.specialRequests }}
                 </p>
               </div>
               <span :class="['status', booking.status]">{{
@@ -87,7 +87,7 @@
             <div class="booking-actions">
               <button
                 v-if="booking.status === 'confirmed' && isUpcoming(booking)"
-                @click="cancelBooking(booking.id)"
+                @click="handleCancelBooking(booking.id)"
                 class="btn btn-danger"
                 :disabled="loading"
               >
@@ -109,6 +109,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import { cancelBooking, getBookings } from "../utils/booking";
 
 const user = computed(() => {
   const user = localStorage.getItem('user');
@@ -125,7 +126,7 @@ const upcomingBookings = computed(() => {
   const today = new Date();
   return bookings.value.filter(
     (booking) =>
-      booking.status === "confirmed" && new Date(booking.check_in_date) >= today
+      booking.status === "confirmed" && new Date(booking.checkInDate) >= today
   );
 });
 
@@ -133,7 +134,7 @@ const pastBookings = computed(() => {
   const today = new Date();
   return bookings.value.filter(
     (booking) =>
-      booking.status === "completed" || new Date(booking.check_out_date) < today
+      booking.status === "completed" || new Date(booking.checkOutDate) < today
   );
 });
 
@@ -149,54 +150,34 @@ const filteredBookings = computed(() => {
 });
 
 const loadBookings = async () => {
-  bookings.value = localStorage.getItem('bookings')
-    ? JSON.parse(localStorage.getItem('bookings'))
-    : [];
+  const user_id = user.value ? user.value.id : null;
+  bookings.value = await getBookings(user_id);
 };
 
-const cancelBooking = async (bookingId) => {
-  // if (!confirm("Are you sure you want to cancel this booking?")) {
-  //   return;
-  // }
-
-  // loading.value = true;
-  // emit("loading", true);
-
-  // try {
-  //   await bookingService.cancelBooking(bookingId);
-
-  //   // Update local booking status
-  //   const booking = bookings.value.find((b) => b.id === bookingId);
-  //   if (booking) {
-  //     booking.status = "cancelled";
-  //   }
-
-  //   emit("success", "Booking cancelled successfully");
-  // } catch (error) {
-  //   const message = error.response?.data?.error || "Failed to cancel booking";
-  //   emit("error", message);
-  // } finally {
-  //   loading.value = false;
-  //   emit("loading", false);
-  // }
+const handleCancelBooking = (bookingId) => {
+  if (bookingId) {
+    cancelBooking(bookingId);
+  }
+  loadBookings();
+  return true;
 };
 
 const viewBookingDetails = (booking) => {
   // Could open a modal or navigate to detailed view
   alert(
-    `Booking Details:\n\nRoom: ${booking.room_name}\nDates: ${formatDate(
-      booking.check_in_date
-    )} - ${formatDate(booking.check_out_date)}\nGuests: ${
+    `Booking Details:\n\nRoom: ${booking.room.name}\nDates: ${formatDate(
+      booking.checkInDate
+    )} - ${formatDate(booking.checkOutDate)}\nGuests: ${
       booking.guests
     }\nTotal: S$${
-      booking.total_amount
+      booking.totalAmount
     }\nStatus: ${booking.status.toUpperCase()}`
   );
 };
 
 const isUpcoming = (booking) => {
   const today = new Date();
-  return new Date(booking.check_in_date) >= today;
+  return new Date(booking.checkInDate) >= today;
 };
 
 const formatDate = (dateString) => {
@@ -334,18 +315,18 @@ onMounted(() => {
 }
 
 .booking-image {
-  flex: 0 0 200px;
+  flex: 0 0 250px;
 }
 
 .booking-image img {
   width: 100%;
-  height: 160px;
+  height: 100%;
   object-fit: cover;
 }
 
 .placeholder-image {
   width: 100%;
-  height: 160px;
+  height: 250px;
   background: #f6f7f8;
   color: #6b7280;
   display: flex;
@@ -365,7 +346,7 @@ onMounted(() => {
   font-size: 1.25rem;
   font-weight: 700;
   color: #31333a;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
 }
 
 .booking-details {
@@ -373,7 +354,6 @@ onMounted(() => {
 }
 
 .booking-details p {
-  margin-bottom: 8px;
   font-size: 14px;
   color: #6b7280;
 }
@@ -387,6 +367,7 @@ onMounted(() => {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-top: 12px;
+  width: fit-content;
 }
 
 .status.confirmed {
@@ -405,7 +386,7 @@ onMounted(() => {
 }
 
 .booking-actions {
-  flex: 0 0 160px;
+  flex: 0 0 200px;
   padding: 24px;
   display: flex;
   flex-direction: column;

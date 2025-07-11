@@ -90,13 +90,9 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  currentUser: {
-    type: Object,
-    default: null,
-  },
 });
 
-const emit = defineEmits(["proceed", "back", "loading", "error"]);
+const emit = defineEmits(["proceed", "back"]);
 
 const loading = ref(false);
 
@@ -119,8 +115,6 @@ const calculateTotal = () => {
 };
 
 const handleSubmit = async () => {
-  loading.value = true;
-  emit("loading", true);
 
   try {
     const bookingData = {
@@ -139,19 +133,16 @@ const handleSubmit = async () => {
     // emit('proceed', response.data)
     emit("proceed", bookingData);
   } catch (error) {
-    const message = error.response?.data?.error || "Failed to create booking";
-    emit("error", message);
-  } finally {
-    loading.value = false;
-    emit("loading", false);
+    console.log("Error creating booking:", error);
   }
 };
 
 onMounted(() => {
-  // Pre-fill form with current user data if available
-  if (props.currentUser) {
-    form.name = props.currentUser.name;
-    form.email = props.currentUser.email;
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log('🚀 ~ onMounted ~ user:', user);
+  if (user) {
+    form.name = user.name;
+    form.email = user.email;
   }
 });
 </script>

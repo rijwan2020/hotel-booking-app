@@ -8,8 +8,8 @@
         <router-link class="nav-btn" v-if="!user" to="/login">Login</router-link>
         <div class="user-menu" v-else>
           <span>Welcome, {{ user.name }}</span>
-          <button class="nav-btn">Dashboard</button>
-          <button class="nav-btn">Logout</button>
+          <button class="nav-btn" @click="goToDashboard">Dashboard</button>
+          <button class="router-link-active router-link-exact-active nav-btn" @click="handleLogout">Logout</button>
         </div>
       </nav>
     </div>
@@ -18,15 +18,21 @@
 
 <script setup>
 import { computed } from "vue";
+import { logout } from "../utils/auth";
 
 const user = computed(() => {
-  return {
-    name: 'Test',
-    email: 'tes@mail.com'
-  }
-  // const user = localStorage.getItem('user');
-  // return user ? JSON.parse(user) : null;
+  const userLoggedId = localStorage.getItem('user');
+  return userLoggedId ? JSON.parse(userLoggedId) : null;
 });
+
+const handleLogout = () => {
+  logout();
+  window.location.href = "/login";
+};
+
+const goToDashboard = () => {
+  window.location.href = "/dashboard";
+};
 
 </script>
 
