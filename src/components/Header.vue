@@ -16,20 +16,18 @@
   </header>
 </template>
 
-<script>
-export default {
-  name: "Headers",
-  // define props
-  props: {
-    user: {
-      type: Object,
-      default: null,
-    },
-  },
-  setup() {
-    return {};
-  },
-};
+<script setup>
+import { computed } from "vue";
+
+const user = computed(() => {
+  return {
+    name: 'Test',
+    email: 'tes@mail.com'
+  }
+  // const user = localStorage.getItem('user');
+  // return user ? JSON.parse(user) : null;
+});
+
 </script>
 
 <style lang="scss" scoped></style>

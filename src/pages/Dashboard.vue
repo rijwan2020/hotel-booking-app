@@ -3,9 +3,9 @@
     <div class="container">
       <div class="dashboard-header">
         <h1>Dashboard - Your Bookings</h1>
-        <button @click="$emit('go-to-search')" class="btn btn-primary">
+        <router-link to="/" class="btn btn-primary">
           + New Booking
-        </button>
+        </router-link>
       </div>
 
       <div class="bookings-section">
@@ -45,27 +45,43 @@
         </div>
 
         <div v-else class="bookings-list">
-          <div v-for="booking in filteredBookings" :key="booking.id" class="booking-card">
+          <div
+            v-for="booking in filteredBookings"
+            :key="booking.id"
+            class="booking-card"
+          >
             <div class="booking-image">
               <img
                 v-if="booking.image_url"
                 :src="booking.image_url"
                 :alt="booking.room_name"
                 @error="handleImageError"
-              >
+              />
               <div v-else class="placeholder-image">Room Image</div>
             </div>
 
             <div class="booking-info">
               <h3>{{ booking.room_name }}</h3>
               <div class="booking-details">
-                <p><strong>Dates:</strong> {{ formatDate(booking.check_in_date) }} - {{ formatDate(booking.check_out_date) }}</p>
+                <p>
+                  <strong>Dates:</strong>
+                  {{ formatDate(booking.check_in_date) }} -
+                  {{ formatDate(booking.check_out_date) }}
+                </p>
                 <p><strong>Guests:</strong> {{ booking.guests }}</p>
                 <p><strong>Total:</strong> S${{ booking.total_amount }}</p>
-                <p><strong>Confirmation:</strong> {{ booking.confirmation_number }}</p>
-                <p v-if="booking.special_requests"><strong>Special Requests:</strong> {{ booking.special_requests }}</p>
+                <p>
+                  <strong>Confirmation:</strong>
+                  {{ booking.confirmation_number }}
+                </p>
+                <p v-if="booking.special_requests">
+                  <strong>Special Requests:</strong>
+                  {{ booking.special_requests }}
+                </p>
               </div>
-              <span :class="['status', booking.status]">{{ booking.status.toUpperCase() }}</span>
+              <span :class="['status', booking.status]">{{
+                booking.status.toUpperCase()
+              }}</span>
             </div>
 
             <div class="booking-actions">
@@ -75,7 +91,7 @@
                 class="btn btn-danger"
                 :disabled="loading"
               >
-                {{ loading ? 'Cancelling...' : 'Cancel Booking' }}
+                {{ loading ? "Cancelling..." : "Cancel Booking" }}
               </button>
               <button
                 @click="viewBookingDetails(booking)"
@@ -92,129 +108,126 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-// import { bookingService } from '../services/api'
+import { ref, computed, onMounted } from "vue";
 
-const props = defineProps({
-  currentUser: {
-    type: Object,
-    required: true
-  }
-})
+const user = computed(() => {
+  const user = localStorage.getItem('user');
+  return user ? JSON.parse(user) : null;
+});
 
-const emit = defineEmits(['go-to-search', 'loading', 'error', 'success'])
+const emit = defineEmits(["go-to-search", "loading", "error", "success"]);
 
-const activeTab = ref('all')
-const bookings = ref([])
-const loading = ref(false)
+const activeTab = ref("all");
+const bookings = ref([]);
+const loading = ref(false);
 
 const upcomingBookings = computed(() => {
-  const today = new Date()
-  return bookings.value.filter(booking =>
-    booking.status === 'confirmed' && new Date(booking.check_in_date) >= today
-  )
-})
+  const today = new Date();
+  return bookings.value.filter(
+    (booking) =>
+      booking.status === "confirmed" && new Date(booking.check_in_date) >= today
+  );
+});
 
 const pastBookings = computed(() => {
-  const today = new Date()
-  return bookings.value.filter(booking =>
-    booking.status === 'completed' || new Date(booking.check_out_date) < today
-  )
-})
+  const today = new Date();
+  return bookings.value.filter(
+    (booking) =>
+      booking.status === "completed" || new Date(booking.check_out_date) < today
+  );
+});
 
 const filteredBookings = computed(() => {
   switch (activeTab.value) {
-    case 'upcoming':
-      return upcomingBookings.value
-    case 'past':
-      return pastBookings.value
+    case "upcoming":
+      return upcomingBookings.value;
+    case "past":
+      return pastBookings.value;
     default:
-      return bookings.value
+      return bookings.value;
   }
-})
+});
 
 const loadBookings = async () => {
-  loading.value = true
-  emit('loading', true)
-
-  try {
-    const response = await bookingService.getUserBookings()
-    bookings.value = response.data
-  } catch (error) {
-    const message = error.response?.data?.error || 'Failed to load bookings'
-    emit('error', message)
-  } finally {
-    loading.value = false
-    emit('loading', false)
-  }
-}
+  bookings.value = localStorage.getItem('bookings')
+    ? JSON.parse(localStorage.getItem('bookings'))
+    : [];
+};
 
 const cancelBooking = async (bookingId) => {
-  if (!confirm('Are you sure you want to cancel this booking?')) {
-    return
-  }
+  // if (!confirm("Are you sure you want to cancel this booking?")) {
+  //   return;
+  // }
 
-  loading.value = true
-  emit('loading', true)
+  // loading.value = true;
+  // emit("loading", true);
 
-  try {
-    await bookingService.cancelBooking(bookingId)
+  // try {
+  //   await bookingService.cancelBooking(bookingId);
 
-    // Update local booking status
-    const booking = bookings.value.find(b => b.id === bookingId)
-    if (booking) {
-      booking.status = 'cancelled'
-    }
+  //   // Update local booking status
+  //   const booking = bookings.value.find((b) => b.id === bookingId);
+  //   if (booking) {
+  //     booking.status = "cancelled";
+  //   }
 
-    emit('success', 'Booking cancelled successfully')
-  } catch (error) {
-    const message = error.response?.data?.error || 'Failed to cancel booking'
-    emit('error', message)
-  } finally {
-    loading.value = false
-    emit('loading', false)
-  }
-}
+  //   emit("success", "Booking cancelled successfully");
+  // } catch (error) {
+  //   const message = error.response?.data?.error || "Failed to cancel booking";
+  //   emit("error", message);
+  // } finally {
+  //   loading.value = false;
+  //   emit("loading", false);
+  // }
+};
 
 const viewBookingDetails = (booking) => {
   // Could open a modal or navigate to detailed view
-  alert(`Booking Details:\n\nRoom: ${booking.room_name}\nDates: ${formatDate(booking.check_in_date)} - ${formatDate(booking.check_out_date)}\nGuests: ${booking.guests}\nTotal: S$${booking.total_amount}\nStatus: ${booking.status.toUpperCase()}`)
-}
+  alert(
+    `Booking Details:\n\nRoom: ${booking.room_name}\nDates: ${formatDate(
+      booking.check_in_date
+    )} - ${formatDate(booking.check_out_date)}\nGuests: ${
+      booking.guests
+    }\nTotal: S$${
+      booking.total_amount
+    }\nStatus: ${booking.status.toUpperCase()}`
+  );
+};
 
 const isUpcoming = (booking) => {
-  const today = new Date()
-  return new Date(booking.check_in_date) >= today
-}
+  const today = new Date();
+  return new Date(booking.check_in_date) >= today;
+};
 
 const formatDate = (dateString) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  })
-}
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+};
 
 const getEmptyMessage = () => {
   switch (activeTab.value) {
-    case 'upcoming':
-      return 'You have no upcoming bookings.'
-    case 'past':
-      return 'You have no past bookings.'
+    case "upcoming":
+      return "You have no upcoming bookings.";
+    case "past":
+      return "You have no past bookings.";
     default:
-      return 'Start planning your next getaway!'
+      return "Start planning your next getaway!";
   }
-}
+};
 
 const handleImageError = (event) => {
-  event.target.style.display = 'none'
-  event.target.nextElementSibling.style.display = 'flex'
-}
+  event.target.style.display = "none";
+  event.target.nextElementSibling.style.display = "flex";
+};
 
 onMounted(() => {
-  // loadBookings()
-})
+  loadBookings()
+});
 </script>
 
 <style scoped>
@@ -239,7 +252,7 @@ onMounted(() => {
 .dashboard-header h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: #31333A;
+  color: #31333a;
 }
 
 .section-tabs {
@@ -262,13 +275,13 @@ onMounted(() => {
 }
 
 .tab-btn.active {
-  background: #3C6E71;
+  background: #3c6e71;
   color: white;
 }
 
 .tab-btn:hover:not(.active) {
   background: #f6f7f8;
-  color: #31333A;
+  color: #31333a;
 }
 
 .no-bookings {
@@ -289,7 +302,7 @@ onMounted(() => {
 .empty-state h3 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #31333A;
+  color: #31333a;
   margin-bottom: 16px;
 }
 
@@ -351,7 +364,7 @@ onMounted(() => {
 .booking-info h3 {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #31333A;
+  color: #31333a;
   margin-bottom: 16px;
 }
 
@@ -378,7 +391,7 @@ onMounted(() => {
 
 .status.confirmed {
   background: rgba(60, 110, 113, 0.1);
-  color: #3C6E71;
+  color: #3c6e71;
 }
 
 .status.cancelled {
@@ -414,7 +427,7 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: #3C6E71;
+  background: #3c6e71;
   color: white;
 }
 
@@ -435,12 +448,12 @@ onMounted(() => {
 
 .btn-secondary {
   background: white;
-  color: #3C6E71;
-  border: 1px solid #3C6E71;
+  color: #3c6e71;
+  border: 1px solid #3c6e71;
 }
 
 .btn-secondary:hover {
-  background: #3C6E71;
+  background: #3c6e71;
   color: white;
 }
 
