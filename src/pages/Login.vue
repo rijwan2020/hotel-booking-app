@@ -121,29 +121,11 @@ onMounted(() => {
 
 <style scoped>
 
-.auth-container {
-  max-width: 440px;
-  margin: 3rem auto;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
-
-.auth-tabs {
-  display: flex;
-  background: #f6f7f8;
-}
-
 .tab-btn {
   flex: 1;
   padding: 16px 24px;
   border: none;
-  background: transparent;
-  cursor: pointer;
-  font-weight: 500;
   color: #31333a;
-  transition: all 0.2s ease;
 }
 
 .tab-btn.active {
@@ -152,81 +134,11 @@ onMounted(() => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.auth-form {
-  padding: 32px;
-}
-
-.auth-form h2 {
-  margin-bottom: 24px;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #31333a;
-}
-
 .form-group {
-  display: flex;
-  flex-direction: column;
   margin-bottom: 24px;
-}
-
-.form-group label {
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: #31333a;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.form-group input {
-  padding: 14px 16px;
-  border: 2px solid #ededf1;
-  border-radius: 8px;
-  font-size: 16px;
-  color: #31333a;
-  background: white;
-  transition: all 0.2s ease;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #3c6e71;
-  box-shadow: 0 0 0 3px rgba(60, 110, 113, 0.1);
-}
-
-.form-group input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .btn {
   width: 100%;
-  padding: 14px 28px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-}
-
-.btn-primary {
-  background: #3c6e71;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: #2a5154;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(60, 110, 113, 0.3);
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
 }
 </style>

@@ -128,9 +128,6 @@ const handleSubmit = async () => {
       totalAmount: calculateTotal(),
       specialRequests: form.specialRequests || null,
     };
-
-    // const response = await bookingService.createBooking(bookingData)
-    // emit('proceed', response.data)
     emit("proceed", bookingData);
   } catch (error) {
     console.log("Error creating booking:", error);
@@ -139,12 +136,9 @@ const handleSubmit = async () => {
 
 onMounted(() => {
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log('🚀 ~ onMounted ~ user:', user);
   if (user) {
     form.name = user.name;
     form.email = user.email;
   }
 });
 </script>
-
-<style lang="scss" scoped></style>

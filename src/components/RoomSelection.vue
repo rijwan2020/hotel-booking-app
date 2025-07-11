@@ -147,5 +147,3 @@ const handleImageError = (event) => {
   event.target.nextElementSibling.style.display = "flex";
 };
 </script>
-
-<style lang="scss" scoped></style>

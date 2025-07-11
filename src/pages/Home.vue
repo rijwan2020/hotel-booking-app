@@ -93,7 +93,7 @@ const handleBookingSubmit = (booking) => {
     (room) => room.id === booking.roomId
   );
   booking.confirmation_number = "RES" + Date.now().toString().slice(-8)
-  booking.user_id = user.value.id ?? null;
+  booking.user_id = user.id || null;
   booking.id = Date.now().toString().slice(-8); // Unique ID based on timestamp
   booking.status = "confirmed";
 
