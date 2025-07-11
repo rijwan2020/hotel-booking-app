@@ -40,6 +40,7 @@ body {
   font-weight: 700;
   color: #3c6371;
   letter-spacing: -0.025em;
+  text-decoration: none;
 }
 
 .nav {
@@ -197,6 +198,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  text-decoration: none;
 }
 
 .btn-primary {

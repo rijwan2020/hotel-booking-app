@@ -77,9 +77,6 @@
 
         <div class="action-buttons">
         <router-link to="/dashboard" class="btn btn-primary">Go to Dashboard</router-link>
-          <!-- <button @click="$emit('go-to-dashboard')" class="btn btn-primary">
-            Go to Dashboard
-          </button> -->
         </div>
       </div>
     </div>
@@ -95,8 +92,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-defineEmits(["go-to-dashboard"]);
 
 const nights = computed(() => {
   if (!props.booking.checkInDate || !props.booking.checkOutDate) return 1;

@@ -1,9 +1,11 @@
 <template>
   <header class="header">
     <div class="container">
-      <h1 class="logo">Hotel Booking</h1>
+      <router-link to="/" class="logo">
+        Hotel Booking
+      </router-link>
       <nav class="nav">
-        <button class="nav-btn" v-if="!user">Login</button>
+        <router-link class="nav-btn" v-if="!user" to="/login">Login</router-link>
         <div class="user-menu" v-else>
           <span>Welcome, {{ user.name }}</span>
           <button class="nav-btn">Dashboard</button>

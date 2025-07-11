@@ -1,37 +1,220 @@
 <template>
-  <section class="auth-page">
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-      <input v-model="email" type="email" placeholder="Email" required />
-      <input v-model="password" type="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
-    <router-link to="/register">Don't have an account? Register</router-link>
-  </section>
+  <div class="container">
+    <div class="auth-container">
+      <div class="auth-tabs">
+        <button
+          @click="authMode = 'login'"
+          :class="{ active: authMode === 'login' }"
+          class="tab-btn"
+        >
+          Login
+        </button>
+        <button
+          @click="authMode = 'register'"
+          :class="{ active: authMode === 'register' }"
+          class="tab-btn"
+        >
+          Register
+        </button>
+      </div>
+
+      <form @submit.prevent="handleSubmit" class="auth-form">
+        <h2>{{ authMode === "login" ? "Login" : "Create Account" }}</h2>
+
+        <div v-if="authMode === 'register'" class="form-group">
+          <label>Name</label>
+          <input
+            v-model="form.name"
+            type="text"
+            required
+            :disabled="loading"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input
+            v-model="form.email"
+            type="email"
+            required
+            :disabled="loading"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input
+            v-model="form.password"
+            type="password"
+            required
+            :disabled="loading"
+            minlength="6"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary" :disabled="loading">
+          {{
+            loading
+              ? "Processing..."
+              : authMode === "login"
+              ? "Login"
+              : "Register"
+          }}
+        </button>
+      </form>
+    </div>
+  </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { saveToken } from '../utils/auth'
+<script setup>
+import { ref, reactive } from "vue";
+import router from "../router";
+// import { authService } from '../services/api'
 
-const email = ref('')
-const password = ref('')
-const router = useRouter()
+const emit = defineEmits(["set-user"]);
 
-const login = async () => {
-  const res = await fetch('http://localhost:3000/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email.value, password: password.value }),
-  })
+const authMode = ref("login");
+const loading = ref(false);
 
-  if (res.ok) {
-    const data = await res.json()
-    saveToken(data.token)
-    router.push('/dashboard')
+const form = reactive({
+  name: "",
+  email: "",
+  password: "",
+});
+
+const handleSubmit = async () => {
+
+  let user = {};
+  if (authMode.value === 'login') {
+    // Simple login simulation
+    user = {
+      id: 1,
+      name: form.email.split('@')[0],
+      email: form.email
+    }
   } else {
-    alert('Login failed')
+    // Simple registration simulation
+    user = {
+      id: 1,
+      name: form.name,
+      email: form.email
+    }
   }
-}
+  localStorage.setItem('token', true);
+  emit("set-user", user);
+  router.push("/dashboard");
+
+};
 </script>
+
+<style scoped>
+
+.auth-container {
+  max-width: 440px;
+  margin: 3rem auto;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.auth-tabs {
+  display: flex;
+  background: #f6f7f8;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 16px 24px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: #31333a;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: white;
+  color: #3c6e71;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.auth-form {
+  padding: 32px;
+}
+
+.auth-form h2 {
+  margin-bottom: 24px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #31333a;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #31333a;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input {
+  padding: 14px 16px;
+  border: 2px solid #ededf1;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #31333a;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3c6e71;
+  box-shadow: 0 0 0 3px rgba(60, 110, 113, 0.1);
+}
+
+.form-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn {
+  width: 100%;
+  padding: 14px 28px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #3c6e71;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #2a5154;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(60, 110, 113, 0.3);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+</style>
